@@ -63,7 +63,7 @@ export function createDestinationChat(destination) {
   }
 
   const chat = client.chats.create({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-3.6-flash',
     config: {
       systemInstruction: buildSystemInstruction(destination),
     },
@@ -143,7 +143,7 @@ You MUST return a single valid JSON object adhering EXACTLY to this schema:
 Ensure there are exactly ${days} days in the days array, numbered 1 to ${days}. Incorporate the famous places where appropriate, and tailor activities to the traveler's preferences. Return pure JSON only.`;
 
   const response = await client.models.generateContent({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-3.6-flash',
     contents: prompt,
     config: {
       responseMimeType: 'application/json',
