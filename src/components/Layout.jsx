@@ -12,9 +12,14 @@ export default function Layout() {
             </span>
             WorldTrip AI
           </Link>
-          <a className="rounded-md bg-emerald-900 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500" href="/#planner">
-            Plan trip
-          </a>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/itinerary"
+              className="inline-flex items-center gap-1.5 rounded-md bg-emerald-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            >
+              Plan Itinerary
+            </Link>
+          </div>
         </nav>
       </header>
 

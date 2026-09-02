@@ -118,6 +118,30 @@ export default function DestinationDetail() {
         </div>
       </section>
 
+      {/* Itinerary CTA Banner */}
+      <section className="page-shell py-6">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-2xl border border-emerald-200/80 bg-gradient-to-r from-emerald-900 via-emerald-950 to-neutral-950 p-8 text-white shadow-lg md:flex-row dark:border-emerald-800/30">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+              Personalized Trip Planner
+            </span>
+            <h2 className="mt-1 text-2xl font-bold sm:text-3xl">
+              Ready to explore {destination.name}?
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-stone-300">
+              Generate an hour-by-hour day plan with morning, afternoon, and evening recommendations customized to your days and interests.
+            </p>
+          </div>
+          <Link
+            to={`/itinerary?destination=${destination.id}`}
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-white px-6 py-3.5 text-sm font-bold text-neutral-950 shadow-md transition hover:bg-stone-200"
+          >
+            <Sparkles size={17} className="text-emerald-800" aria-hidden="true" />
+            Plan {destination.name} Itinerary
+          </Link>
+        </div>
+      </section>
+
       <section className="page-shell py-10">
         <div className="mx-auto max-w-2xl">
           <ChatBot destination={destination} />

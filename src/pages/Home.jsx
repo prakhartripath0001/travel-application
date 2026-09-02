@@ -1,5 +1,6 @@
-import { ArrowRight, ChevronDown, Landmark } from 'lucide-react';
+import { ArrowRight, ChevronDown, Landmark, Sparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ChatBot from '../components/ChatBot.jsx';
 import DestinationExplorer from '../components/DestinationExplorer.jsx';
 import FamousPlacesSection from '../components/FamousPlacesSection.jsx';
@@ -49,13 +50,22 @@ export default function Home() {
               Explore global destinations, read the conditions now, discover landmark places, and shape a
               refined trip plan with an AI assistant.
             </p>
-            <a
-              href="#destinations"
-              className="mt-9 inline-flex items-center gap-3 rounded-md bg-white px-5 py-3 font-semibold text-neutral-950 transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            >
-              Explore Our Work
-              <ArrowRight size={18} aria-hidden="true" />
-            </a>
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <a
+                href="#destinations"
+                className="inline-flex items-center gap-3 rounded-md bg-white px-5 py-3 font-semibold text-neutral-950 transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              >
+                Explore Destinations
+                <ArrowRight size={18} aria-hidden="true" />
+              </a>
+              <Link
+                to="/itinerary"
+                className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-5 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/20"
+              >
+                <Sparkles size={18} aria-hidden="true" />
+                Plan My Trip
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -72,6 +82,30 @@ export default function Home() {
       <LocationPanel onLocationChange={setSelectedLocation} />
 
       <DestinationExplorer selectedLocation={selectedLocation} />
+
+      {/* Itinerary CTA Banner */}
+      <section className="page-shell py-8">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-2xl border border-stone-200 bg-gradient-to-r from-stone-900 via-neutral-900 to-emerald-950 p-8 text-white shadow-md md:flex-row dark:border-neutral-800">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+              AI Itinerary Planner
+            </span>
+            <h2 className="mt-1 text-2xl font-bold sm:text-3xl">
+              Want a day-by-day travel schedule?
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-stone-300">
+              Let Gemini curate morning, afternoon, and evening activities with insider tips tailored to {selectedDestination.name} or any destination.
+            </p>
+          </div>
+          <Link
+            to={`/itinerary?destination=${selectedDestination.id}`}
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow transition hover:bg-emerald-500"
+          >
+            <Sparkles size={17} aria-hidden="true" />
+            Generate Itinerary for {selectedDestination.name}
+          </Link>
+        </div>
+      </section>
 
       <section className="page-shell grid gap-6 py-6 lg:grid-cols-3" id="planner">
         <WeatherCard location={selectedDestination} />
