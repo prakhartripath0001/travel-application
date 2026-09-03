@@ -15,7 +15,16 @@ const PRESET_INTERESTS = [
 ];
 
 export default function ItineraryPlanner({ initialDestinationId }) {
-  const { itinerary, status, errorMessage, generate, reset } = useItinerary();
+  const {
+    itinerary,
+    status,
+    errorMessage,
+    errorDetails,
+    generate,
+    generateCurated,
+    retry,
+    reset,
+  } = useItinerary();
 
   const [selectedDestinationId, setSelectedDestinationId] = useState(
     initialDestinationId || destinations[0]?.id || 'paris',
@@ -47,13 +56,36 @@ export default function ItineraryPlanner({ initialDestinationId }) {
   if (status === 'ready' && itinerary) {
     return (
       <div className="space-y-8 animate-hero-enter">
+        {/* Curated Fallback Notification Banner */}
+        {itinerary.isCuratedFallback && (
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/90 p-4 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+            <div className="flex items-start gap-2.5">
+              <Sparkles size={18} className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
+              <div>
+                <p className="font-semibold text-stone-900 dark:text-white">Curated Backup Itinerary Active</p>
+                <p className="mt-0.5 text-xs text-stone-600 dark:text-stone-300">
+                  Because Gemini AI servers are currently experiencing high demand, we loaded our verified curated guide for {itinerary.destination}.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={retry}
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-emerald-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            >
+              <RefreshCw size={13} />
+              Retry with Live AI
+            </button>
+          </div>
+        )}
+
         {/* Itinerary Header Bar */}
         <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8 dark:border-neutral-800 dark:bg-neutral-900">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
                 <Sparkles size={15} aria-hidden="true" />
-                <span>AI-Curated Journey</span>
+                <span>{itinerary.isCuratedFallback ? 'Curated Destination Guide' : 'AI-Curated Journey'}</span>
               </div>
               <h2 className="mt-1 text-2xl font-extrabold text-stone-950 sm:text-3xl dark:text-white">
                 {itinerary.duration} Days in {itinerary.destination}
@@ -126,15 +158,57 @@ export default function ItineraryPlanner({ initialDestinationId }) {
           </p>
         </div>
 
+        {/* Error Alert with 503 High Demand Recovery */}
         {errorMessage && (
           <div
-            className="mt-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-900 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200"
+            className={`mt-6 rounded-xl border p-4 text-sm ${
+              errorDetails?.isHighDemand
+                ? 'border-amber-200 bg-amber-50/90 text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200'
+                : 'border-red-200 bg-red-50 text-red-900 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200'
+            }`}
             role="alert"
           >
-            <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-600 dark:text-red-400" />
-            <div>
-              <p className="font-semibold">Unable to generate itinerary</p>
-              <p className="mt-0.5">{errorMessage}</p>
+            <div className="flex items-start gap-3">
+              <AlertCircle
+                size={18}
+                className={`mt-0.5 shrink-0 ${
+                  errorDetails?.isHighDemand
+                    ? 'text-amber-600 dark:text-amber-400'
+                    : 'text-red-600 dark:text-red-400'
+                }`}
+              />
+              <div className="flex-1">
+                <p className="font-semibold text-stone-950 dark:text-white">
+                  {errorDetails?.isHighDemand
+                    ? 'AI Service Under High Demand (503)'
+                    : errorDetails?.isRateLimited
+                    ? 'Rate Limit Reached (429)'
+                    : 'Unable to generate itinerary'}
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-stone-700 dark:text-stone-300">
+                  {errorMessage}
+                </p>
+                {errorDetails?.isRetryable && (
+                  <div className="mt-3.5 flex flex-wrap items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={retry}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-95 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                    >
+                      <RefreshCw size={13} />
+                      Try Again
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => generateCurated(selectedDestination, days, preferences)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-stone-800 shadow-sm transition hover:border-emerald-600 hover:text-emerald-850 active:scale-95 dark:border-neutral-700 dark:bg-neutral-800 dark:text-stone-200 dark:hover:border-emerald-400"
+                    >
+                      <Sparkles size={13} className="text-amber-500" />
+                      View Curated Backup Itinerary
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

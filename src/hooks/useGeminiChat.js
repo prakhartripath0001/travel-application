@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createDestinationChat, isGeminiConfigured, sendChatMessage } from '../services/gemini.js';
+import { createDestinationChat, isGeminiConfigured, parseGeminiError, sendChatMessage } from '../services/gemini.js';
 
 let nextId = 1;
 
@@ -60,10 +60,14 @@ export function useGeminiChat(destination) {
         setMessages((prev) => [...prev, assistantMessage]);
         setStatus('idle');
       } catch (error) {
-        const errorMessage = createMessage(
-          'assistant',
-          'Sorry, I ran into an issue processing your request. Please try again in a moment.',
-        );
+        const parsed = parseGeminiError(error);
+        const errorText = parsed.isHighDemand
+          ? 'The AI model is currently experiencing temporary high demand (503). Please wait a few seconds and send your question again.'
+          : parsed.isRateLimited
+          ? 'Request rate limit reached. Please wait a moment before sending another message.'
+          : 'Sorry, I ran into an issue processing your request. Please try again in a moment.';
+
+        const errorMessage = createMessage('assistant', errorText);
         setMessages((prev) => [...prev, errorMessage]);
         setStatus('error');
 
