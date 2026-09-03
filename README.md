@@ -98,11 +98,11 @@ The experience is centered around purposeful exploration: travelers can discover
    ```
 
    Add your API keys to `.env`:
-   ```env
-   VITE_OPENWEATHER_API_KEY=your_openweather_api_key_here
-   VITE_PEXELS_API_KEY=your_pexels_api_key_here
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
-   ```
+    ```env
+    OPENWEATHER_API_KEY=your_openweather_api_key_here
+    PEXELS_API_KEY=your_pexels_api_key_here
+    GEMINI_API_KEY=your_gemini_api_key_here
+    ```
    > *Note: Open-Meteo acts as an automatic fallback if an OpenWeather key is not provided.*
 
 4. **Start the development server**:

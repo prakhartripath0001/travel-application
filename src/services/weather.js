@@ -1,4 +1,4 @@
-const openWeatherKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const openWeatherKey = import.meta.env.OPENWEATHER_API_KEY || import.meta.env.VITE_OPENWEATHER_API_KEY;
 
 const openMeteoCodes = {
   0: 'Clear sky',

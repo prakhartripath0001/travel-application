@@ -25,7 +25,7 @@ export function useGeminiChat(destination) {
       setMessages([
         createMessage(
           'assistant',
-          `I'd love to help you plan your trip to ${destination.name}, but the Gemini API key is not configured yet. Please add your VITE_GEMINI_API_KEY to the .env file and restart the dev server.`,
+          `I'd love to help you plan your trip to ${destination.name}, but the Gemini API key is not configured yet. Please add your GEMINI_API_KEY to the .env file and restart the dev server.`,
         ),
       ]);
       setStatus('error');

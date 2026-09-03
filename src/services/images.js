@@ -1,4 +1,4 @@
-const pexelsKey = import.meta.env.VITE_PEXELS_API_KEY;
+const pexelsKey = import.meta.env.PEXELS_API_KEY || import.meta.env.VITE_PEXELS_API_KEY;
 const cache = new Map();
 
 export async function fetchPexelsImage(query, signal) {

@@ -15,7 +15,7 @@ export function useItinerary() {
 
     if (!isGeminiConfigured()) {
       setErrorMessage(
-        'Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file and restart the development server.',
+        'Gemini API key is not configured. Please add GEMINI_API_KEY to your .env file and restart the development server.',
       );
       setStatus('error');
       return;

@@ -1,6 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-
-const geminiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const geminiKey = import.meta.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 
 let ai = null;
 
@@ -88,7 +87,7 @@ export function isGeminiConfigured() {
 export async function generateItinerary(destination, days = 3, preferences = '') {
   const client = getClient();
   if (!client) {
-    throw new Error('Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.');
+    throw new Error('Gemini API key is not configured. Please add GEMINI_API_KEY to your .env file.');
   }
 
   const famousPlacesText = destination.famousPlaces
